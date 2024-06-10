@@ -1,3 +1,22 @@
+ var xhr = new XMLHttpRequest();
+ xhr.open('GET', 'http://localhost:3000/data', true);
+ xhr.onload = function () {
+   if (xhr.status >= 200 && xhr.status < 300) {
+     // Request was successful
+     //console.log(xhr.responseText);
+     dataArray = JSON.parse(xhr.responseText);
+     console.log(dataArray);
+   } else {
+     // Request failed
+     console.error('Request failed with status:', xhr.status);
+   }
+ };
+ xhr.onerror = function () {
+   console.error('Request failed');
+ };
+
+ xhr.send();
+
 var options = {
   series: [{
   name: 'candle',

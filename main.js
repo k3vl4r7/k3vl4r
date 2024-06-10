@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const express = require('express');
+const fs = require('fs');
 const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 const data = [];
