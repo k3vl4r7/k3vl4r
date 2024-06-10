@@ -19,7 +19,7 @@ function getData() {
   xhr.send();
 }
 
-const getData = setInterval(getData, 10000);
+setInterval(getData, 10000);
 
 var options = {
   series: [
