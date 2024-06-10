@@ -1,0 +1,28 @@
+{
+  "name": "k3vl4r terminal",
+  "version": "1.0.0",
+  "description": "a market tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/",
+  "keywords": [
+    "k3vl4r",
+    "crypto",
+    "stocks",
+    "finance",
+    "trading"
+  ],
+  "author": "K3vl4r L4bs LLC",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "axios": "^1.7.2",
+    "electron": "^30.1.0",
+    "express": "^4.19.2"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7",
+    "tradingview-scraper": "^1.0.4"
+  }
+}
