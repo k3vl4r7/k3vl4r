@@ -30,7 +30,14 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  const app = express();
+  const port = 3000;
+
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+    createWindow()
+  });
+
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
