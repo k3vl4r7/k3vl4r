@@ -33,6 +33,13 @@ app.whenReady().then(() => {
   const app = express();
   const port = 3000;
 
+  app.get('/data', (req, res) => {
+    const filePath = path.join(__dirname, 'output.txt');
+    const readStream = fs.createReadStream(filePath);
+  
+    readStream.pipe(res);
+  });
+
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
     createWindow()
