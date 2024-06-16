@@ -1,340 +1,86 @@
-options = {
-  series: [
-    {
+// Function to create a candlestick chart
+function createCandlestickChart(selector, data, height, titleText) {
+  return new ApexCharts(document.querySelector(selector), {
+    series: [{
       name: "candle",
       type: "candlestick",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: [70500, 69401, 69350, 70400],
+      data: data
+    }],
+    chart: {
+      height: height,
+      type: "line"
+    },
+    title: {
+      text: titleText,
+      align: "left"
+    },
+    stroke: {
+      width: [3, 1]
+    },
+    tooltip: {
+      shared: true,
+      custom: [
+        function ({ seriesIndex, dataPointIndex, w }) {
+          return w.globals.series[seriesIndex][dataPointIndex];
         },
-        {
-          x: new Date(1538780400000),
-          y: [70200, 70500, 70200, 70100],
+        function ({ seriesIndex, dataPointIndex, w }) {
+          var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
+          var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
+          var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
+          var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
+          return (
+            '<div class="apexcharts-tooltip-candlestick">' +
+            '<div>Open: <span class="value">' + o + "</span></div>" +
+            '<div>High: <span class="value">' + h + "</span></div>" +
+            '<div>Low: <span class="value">' + l + "</span></div>" +
+            '<div>Close: <span class="value">' + c + "</span></div>" +
+            "</div>"
+          );
         },
       ],
     },
-  ],
-  chart: {
-    height: 350,
-    type: "line",
-  },
-  title: {
-    text: "BTCUSD",
-    align: "left",
-  },
-  stroke: {
-    width: [3, 1],
-  },
-  tooltip: {
-    shared: true,
-    custom: [
-      function ({ seriesIndex, dataPointIndex, w }) {
-        return w.globals.series[seriesIndex][dataPointIndex];
-      },
-      function ({ seriesIndex, dataPointIndex, w }) {
-        var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-        var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-        var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
-        var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-        return (
-          '<div class="apexcharts-tooltip-candlestick">' +
-          '<div>Open: <span class="value">' +
-          o +
-          "</span></div>" +
-          '<div>High: <span class="value">' +
-          h +
-          "</span></div>" +
-          '<div>Low: <span class="value">' +
-          l +
-          "</span></div>" +
-          '<div>Close: <span class="value">' +
-          c +
-          "</span></div>" +
-          "</div>"
-        );
-      },
-    ],
-  },
-  xaxis: {
-    type: "datetime",
-  },
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
-
-function getData() {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost:5000/data", true);
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      // Request was successful
-      //console.log(xhr.responseText);
-      dataArray = JSON.parse(xhr.responseText);
-      // Update series data in options
-      options.series[0].data = dataArray;
-      // If chart is already rendered, update the series
-      if (chart) {
-        chart.updateSeries([{ data: dataArray }]);
-      } else {
-        // If chart is not rendered, render it with updated options
-        chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-      }
-    } else {
-      // Request failed
-      console.error("Request failed with status:", xhr.status);
-    }
-  };
-  xhr.onerror = function () {
-    console.error("Request failed");
-  };
-
-  xhr.send();
+    xaxis: {
+      type: "datetime"
+    },
+  });
 }
 
-setInterval(getData, 10000);
+// Function to fetch and update chart data
+function updateChartData(chart, url) {
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(dataArray => {
+      // Update series data
+      chart.updateSeries([{ data: dataArray }]);
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
 
-
-var options2 = {
-  series: [
-    {
-      name: "candle",
-      type: "candlestick",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: [70500, 69401, 69350, 70400],
-        },
-        {
-          x: new Date(1538780400000),
-          y: [70200, 70500, 70200, 70100],
-        },
-      ],
-    },
-  ],
-  chart: {
-    height: 350,
-    type: "line",
-  },
-  title: {
-    text: "BTCUSD",
-    align: "left",
-  },
-  stroke: {
-    width: [3, 1],
-  },
-  tooltip: {
-    shared: true,
-    custom: [
-      function ({ seriesIndex, dataPointIndex, w }) {
-        return w.globals.series[seriesIndex][dataPointIndex];
-      },
-      function ({ seriesIndex, dataPointIndex, w }) {
-        var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-        var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-        var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
-        var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-        return (
-          '<div class="apexcharts-tooltip-candlestick">' +
-          '<div>Open: <span class="value">' +
-          o +
-          "</span></div>" +
-          '<div>High: <span class="value">' +
-          h +
-          "</span></div>" +
-          '<div>Low: <span class="value">' +
-          l +
-          "</span></div>" +
-          '<div>Close: <span class="value">' +
-          c +
-          "</span></div>" +
-          "</div>"
-        );
-      },
+// Initial chart setup and data fetch
+document.addEventListener("DOMContentLoaded", function() {
+  const chartOptions1 = {
+    data: [
+      { x: new Date(1538778600000), y: [70500, 69401, 69350, 70400] },
+      { x: new Date(1538780400000), y: [70200, 70500, 70200, 70100] }
     ],
-  },
-  xaxis: {
-    type: "datetime",
-  },
-};
+    height: 800,
+    title: "BTCUSD"
+  };
 
-var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
-chart2.render();
+  const chart1 = createCandlestickChart("#chart", chartOptions1.data, chartOptions1.height, chartOptions1.title);
+  chart1.render();
 
-var options3 = {
-  series: [
-    {
-      name: "line",
-      type: "line",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: 6604,
-        },
-        {
-          x: new Date(1538782200000),
-          y: 6602,
-        },
-        {
-          x: new Date(1538814600000),
-          y: 6607,
-        },
-        {
-          x: new Date(1538884800000),
-          y: 6620,
-        },
-      ],
-    },
-    {
-      name: "candle",
-      type: "candlestick",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: [6629.81, 6650.5, 6623.04, 6633.33],
-        },
-        {
-          x: new Date(1538780400000),
-          y: [6632.01, 6643.59, 6620, 6630.11],
-        },
-      ],
-    },
-  ],
-  chart: {
-    height: 350,
-    type: "line",
-  },
-  title: {
-    text: "CandleStick Chart",
-    align: "left",
-  },
-  stroke: {
-    width: [3, 1],
-  },
-  tooltip: {
-    shared: true,
-    custom: [
-      function ({ seriesIndex, dataPointIndex, w }) {
-        return w.globals.series[seriesIndex][dataPointIndex];
-      },
-      function ({ seriesIndex, dataPointIndex, w }) {
-        var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-        var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-        var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
-        var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-        return (
-          '<div class="apexcharts-tooltip-candlestick">' +
-          '<div>Open: <span class="value">' +
-          o +
-          "</span></div>" +
-          '<div>High: <span class="value">' +
-          h +
-          "</span></div>" +
-          '<div>Low: <span class="value">' +
-          l +
-          "</span></div>" +
-          '<div>Close: <span class="value">' +
-          c +
-          "</span></div>" +
-          "</div>"
-        );
-      },
-    ],
-  },
-  xaxis: {
-    type: "datetime",
-  },
-};
+  // Fetch data initially and at intervals
+  updateChartData(chart1, "http://localhost:5000/data");
+  setInterval(() => {
+    updateChartData(chart1, "http://localhost:5000/data");
+  }, 60000);
+});
 
-var chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
-chart3.render();
-
-var options4 = {
-  series: [
-    {
-      name: "line",
-      type: "line",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: 6604,
-        },
-        {
-          x: new Date(1538782200000),
-          y: 6602,
-        },
-        {
-          x: new Date(1538814600000),
-          y: 6607,
-        },
-        {
-          x: new Date(1538884800000),
-          y: 6620,
-        },
-      ],
-    },
-    {
-      name: "candle",
-      type: "candlestick",
-      data: [
-        {
-          x: new Date(1538778600000),
-          y: [6629.81, 6650.5, 6623.04, 6633.33],
-        },
-        {
-          x: new Date(1538780400000),
-          y: [6632.01, 6643.59, 6620, 6630.11],
-        },
-      ],
-    },
-  ],
-  chart: {
-    height: 350,
-    type: "line",
-  },
-  title: {
-    text: "CandleStick Chart",
-    align: "left",
-  },
-  stroke: {
-    width: [3, 1],
-  },
-  tooltip: {
-    shared: true,
-    custom: [
-      function ({ seriesIndex, dataPointIndex, w }) {
-        return w.globals.series[seriesIndex][dataPointIndex];
-      },
-      function ({ seriesIndex, dataPointIndex, w }) {
-        var o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-        var h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-        var l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
-        var c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-        return (
-          '<div class="apexcharts-tooltip-candlestick">' +
-          '<div>Open: <span class="value">' +
-          o +
-          "</span></div>" +
-          '<div>High: <span class="value">' +
-          h +
-          "</span></div>" +
-          '<div>Low: <span class="value">' +
-          l +
-          "</span></div>" +
-          '<div>Close: <span class="value">' +
-          c +
-          "</span></div>" +
-          "</div>"
-        );
-      },
-    ],
-  },
-  xaxis: {
-    type: "datetime",
-  },
-};
-
-var chart4 = new ApexCharts(document.querySelector("#chart4"), options4);
-chart4.render();

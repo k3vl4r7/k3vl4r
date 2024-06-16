@@ -10,7 +10,7 @@ body {
 }
 
 #chart, #chart2, #chart3, #chart4 {
-    width: 500px;
+    width: 1024px;
     display: inline-block;
     margin: 5px auto;
   }
