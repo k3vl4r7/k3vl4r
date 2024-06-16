@@ -85,7 +85,7 @@ function fetchDataAndFormat() {
           console.log(formattedData);
 
           // Close the connection pool
-          pool.end();
+          //pool.end();
         })
         .catch(err => {
           console.error('Error executing query: ' + err.message);
@@ -101,12 +101,16 @@ function fetchDataAndFormat() {
       console.error('Error connecting to database: ' + err.message);
 
       // Close the connection pool
-      pool.end();
+      //pool.end();
     });
 }
 
 // Call the function to fetch data and format it
 fetchDataAndFormat();
+
+var interval = 10000;
+const job = setInterval(fetchDataAndFormat, interval);
+
 
 	const app = express();
 	const port = 5000;
