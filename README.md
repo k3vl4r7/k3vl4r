@@ -1,10 +1,10 @@
 # k3vl4r
 
-Not functional/in early stages
-
 **Clone and run**
 
-A small app for tracking bitcoin price and making smart investments for the long term
+A small app for getting comfortable with NodeJS, Electron framework, and ApexCharts.
+
+The objective is to collect Bitcoin OHCL data realtime, and chart it on a candlestick chart using Apex, all within an Electron window.
 
 ## To Use
 
