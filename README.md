@@ -1,5 +1,7 @@
 # k3vl4r
 
+Not functional/in early stages
+
 **Clone and run**
 
 A small app for tracking bitcoin price and making smart investments for the long term
